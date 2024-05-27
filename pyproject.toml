@@ -1,0 +1,23 @@
+[tool.ruff]
+include = ["manage.py", "server/**"]
+
+line-length = 78
+indent-width = 4
+
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN101", # missing self annotations
+    "ANN102", # missing cls annotations
+    "ANN401", # Any type hints are disallowed
+    "T201",   # debug use of print
+    # related to FIX and TODO
+    "FIX",
+    "TD002",
+    "TD003",
+    "SLF001", # private member access
+    "PGH003", # type: ignore
+    "D",      # missing documentation
+]
