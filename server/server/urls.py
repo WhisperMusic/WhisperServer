@@ -15,8 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.contrib.auth.models import User
+from django.urls import include, path
+from rest_framework import routers, serializers, viewsets
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ["url", "username", "email", "is_staff"]
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+router = routers.DefaultRouter()
+router.register("users", UserViewSet)
+
+# Firstly root URI will be REST API's view
+# for now "api/*" will be just for requests to server
+
+# TODO: Move REST API's view to smth like "api/doct/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include(router.urls)),
+    path("api/", include("rest_framework.urls", namespace="rest_framework")),
 ]
