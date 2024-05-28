@@ -3,3 +3,4 @@ Django~=5.0.6
 djangorestframework~=3.14.0
 # markdown~=3.6 # will it be used?
 python-dotenv~=1.0.1
+python-decouple~=3.8
