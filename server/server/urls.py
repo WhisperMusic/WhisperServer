@@ -16,13 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
+
+from server.api import views
 
 # Firstly root URI will be REST API's view
 # for now "api/*" will be just for requests to server
 
 # TODO: Move REST API's view to smth like "api/doct/"
 
+router = routers.DefaultRouter()
+router.register("users", views.UserViewSet)
+router.register("groups", views.GroupViewSet)
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("rest_framework.urls", namespace="rest_framework")),
+    path("", include(router.urls)),
+    path(
+        "api-auth/",
+        include("rest_framework.urls", namespace="rest_framework"),
+    ),
 ]
