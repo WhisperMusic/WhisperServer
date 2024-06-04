@@ -28,7 +28,7 @@ goto start
         exit /b %errorlevel%
     )
 
-    pip install -r requirements.txt
+    %VIRTUAL_ENV_PATH%\Scripts\python.exe -m pip install -r requirements.txt
 
     if not %errorlevel% == 0 (
         echo. & echo "[ERROR] Failed to install all required dependencies" & echo.
