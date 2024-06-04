@@ -19,21 +19,21 @@ goto start
     if not %errorlevel% == 0 (
         echo. & echo "[ERROR] Failed to create Python Virtual Environment" & echo.
         exit /b %errorlevel%
-    ) else echo %errorlevel%
+    ) else echo Successfully created Python Virtual Environment
 
     call %VIRTUAL_ENV_PATH%\Scripts\activate.bat
 
     if not %errorlevel% == 0 (
         echo. & echo "[ERROR] Failed to activate Python Virtual Environment in current cmd session" & echo.
         exit /b %errorlevel%
-    )
+    ) else echo Activated Python Virtual Environment
 
     %VIRTUAL_ENV_PATH%\Scripts\python.exe -m pip install -r requirements.txt
 
     if not %errorlevel% == 0 (
         echo. & echo "[ERROR] Failed to install all required dependencies" & echo.
         exit /b %errorlevel%
-    )
+    ) else echo Successfully installed all required dependencies
 
     echo.
     goto :eof
