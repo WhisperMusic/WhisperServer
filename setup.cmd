@@ -21,7 +21,7 @@ goto start
         exit /b %errorlevel%
     ) else echo %errorlevel%
 
-    %VIRTUAL_ENV_PATH%\Scripts\activate
+    call %VIRTUAL_ENV_PATH%\Scripts\activate.bat
 
     if not %errorlevel% == 0 (
         echo. & echo "[ERROR] Failed to activate Python Virtual Environment in current cmd session" & echo.
