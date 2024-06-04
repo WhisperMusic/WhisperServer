@@ -9,16 +9,14 @@ goto start
     goto :eof
 
 :CREATE_VIRTUAL_ENVIRONMENT
-    set /p _venv_path="Path to Virtual Environment [default=.venv]: "
-
-
-    if not defined _venv_path set _venv_path=.venv
+    set VIRTUAL_ENV_PATH=.venv
+    set /p VIRTUAL_ENV_PATH="Path to Virtual Environment [default=.venv]: "
 
     echo.
     echo Creating Virtual Environment . . . 
     echo.
 
-    python -m venv %_venv_path% && %_venv_path%\Scripts\activate && pip install -r requirements.txt
+    python -m venv %VIRTUAL_ENV_PATH% && %VIRTUAL_ENV_PATH%\Scripts\activate && pip install -r requirements.txt
 
     echo.
     goto :eof
