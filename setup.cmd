@@ -45,7 +45,18 @@ goto start
     echo.
     goto :eof
 
+:SET_SECRET_KEY
+    set /p SECRET_KEY="Now create a secret key for server (will be stored in server/.env): "
+    set SERVER_DEBUG=False
+
+    set SECRET_KEY > server/.env
+    set SERVER_DEBUG >> server/.env
+
+    goto :eof
+
 :start
 if not defined VIRTUAL_ENV call:SETUP_VIRTUAL_ENVIRONMENT
+
+call :SET_SECRET_KEY
 
 echo Successfully set up the server
