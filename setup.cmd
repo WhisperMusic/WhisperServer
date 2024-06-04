@@ -5,7 +5,14 @@ goto start
     echo You are running setup without Python Virtual Environment activated & echo.
     choice /c YN /m "Do you want to automatically create new environment (Y/N)? " /n
 
-    if errorlevel == 1 call:CREATE_VIRTUAL_ENVIRONMENT
+    if not errorlevel == 1 goto :eof
+    
+    call:CREATE_VIRTUAL_ENVIRONMENT
+
+    echo To activate Virtual Environment again in another cmd session run the following:
+    echo %VIRTUAL_ENV_PATH%\Scripts\activate.bat
+    echo.
+    
     goto :eof
 
 :CREATE_VIRTUAL_ENVIRONMENT
@@ -28,7 +35,7 @@ goto start
         exit /b %errorlevel%
     ) else echo Activated Python Virtual Environment
 
-    %VIRTUAL_ENV_PATH%\Scripts\python.exe -m pip install -r requirements.txt
+    %VIRTUAL_ENV_PATH%\Scripts\python.exe -m pip install -r requirements.txt >nul
 
     if not %errorlevel% == 0 (
         echo. & echo "[ERROR] Failed to install all required dependencies" & echo.
@@ -40,3 +47,5 @@ goto start
 
 :start
 if not defined VIRTUAL_ENV call:SETUP_VIRTUAL_ENVIRONMENT
+
+echo Successfully set up the server
