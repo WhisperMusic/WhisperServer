@@ -21,3 +21,11 @@ ignore = [
     "PGH003", # type: ignore
     "D",      # missing documentation
 ]
+
+[tool.pyright]
+include = ["server/**"]
+
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+
+typeCheckingMode = "standard"
