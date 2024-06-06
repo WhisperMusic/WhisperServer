@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "api",
+    "muse_store",
+    "muse_store.users",
 ]
 
 MIDDLEWARE = [
