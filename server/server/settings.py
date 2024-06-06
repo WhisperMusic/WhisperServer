@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "muse_store",
     "muse_store.users",
+    "muse_store.tracks",
 ]
 
 MIDDLEWARE = [
