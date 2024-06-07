@@ -9,6 +9,7 @@ class UserSerializer(HyperlinkedModelSerializer):
         model = User
         fields: ClassVar = ["url", "username", "email", "groups"]
 
+
 class GroupSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Group
