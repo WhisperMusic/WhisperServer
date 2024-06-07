@@ -4,7 +4,7 @@ from .models import Track
 
 
 class TrackAdmin(admin.ModelAdmin):
-    fields = ["title", "artist", "audio"]  # noqa: RUF012
+    fields = ["title", "artist", "audio", "uploader"]  # noqa: RUF012
 
 
 admin.site.register(Track, TrackAdmin)
