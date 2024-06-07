@@ -5,7 +5,7 @@ from rest_framework.serializers import HyperlinkedModelSerializer
 from muse_store.tracks.models import Track
 
 
-class TrackModelSerializer(HyperlinkedModelSerializer):
+class TrackSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Track
         fields: ClassVar = ["title", "artist"]
