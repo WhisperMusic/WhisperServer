@@ -11,7 +11,7 @@ class Track(models.Model):
 
     audio = models.FileField(upload_to="audio/")
 
-    uploader = models.ForeignKey(User, models.CASCADE)
+    uploader = models.ForeignKey(User, models.CASCADE, related_name="tracks")
 
     objects: ClassVar[BaseManager[Self]]
 
