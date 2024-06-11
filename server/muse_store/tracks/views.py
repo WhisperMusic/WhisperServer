@@ -1,3 +1,5 @@
+from typing import override
+
 from django.db.models.manager import BaseManager
 from django.http import HttpRequest
 from rest_framework import status
@@ -20,14 +22,24 @@ class TracksViewSet(ReadOnlyModelViewSet):
 class MyTracksViewSet(ModelViewSet):
     serializer_class = TrackSerializer
 
+    @override
     def get_queryset(self) -> BaseManager[Track]:  # pyright: ignore[reportIncompatibleMethodOverride]
         user = self.request.user
         return Track.objects.filter(uploader=user).all()
 
-    def list(self, request: HttpRequest) -> Response:
-        if not request.user.is_authenticated:
+    def check_logged_in(self) -> Response | None:
+        if not self.request.user.is_authenticated:
             content = {"detail": "This view requires authentication."}
             return Response(content, status=status.HTTP_401_UNAUTHORIZED)
+
+        return None
+
+    @override
+    def list(self, request: HttpRequest) -> Response:
+        respoonse = self.check_logged_in()
+
+        if respoonse is not None:
+            return respoonse
 
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
