@@ -5,7 +5,7 @@ from rest_framework.exceptions import NotAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from muse_store.tracks.models import Track
-from muse_store.tracks.serializers import TrackSerializer
+from muse_store.tracks.serializers import MyTrackSerializer, TrackSerializer
 
 
 class TracksViewSet(ReadOnlyModelViewSet):
@@ -18,14 +18,14 @@ class TracksViewSet(ReadOnlyModelViewSet):
     serializer_class = TrackSerializer
 
 class MyTracksViewSet(ModelViewSet):
-    serializer_class = TrackSerializer
+    serializer_class = MyTrackSerializer
 
     @override
     def get_queryset(self) -> BaseManager[Track]:  # pyright: ignore[reportIncompatibleMethodOverride]
         return Track.objects.all()
 
     @override
-    def get_serializer(self, *args: Any, **kwargs: Any) -> TrackSerializer:  # type: ignore[reportIncompatibleMethodOverride]
+    def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # type: ignore[reportIncompatibleMethodOverride]
         self.check_logged_in()
         return super().get_serializer(
             *args, **kwargs, uploader=self.request.user,

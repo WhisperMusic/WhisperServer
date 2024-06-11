@@ -9,7 +9,13 @@ from muse_store.tracks.models import Track
 class TrackSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Track
-        fields: ClassVar = ["title", "artist", "audio"]
+        fields: ClassVar = ["url", "title", "artist", "audio", "uploader"]
+
+
+class MyTrackSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Track
+        fields: ClassVar = ["url", "title", "artist", "audio"]
 
     def __init__(
         self, *args: Any, uploader: User | None = None, **kwargs: Any,
