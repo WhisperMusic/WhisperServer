@@ -1,9 +1,9 @@
 from typing import override
 
 from django.db.models.manager import BaseManager
-from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
@@ -36,7 +36,7 @@ class MyTracksViewSet(ModelViewSet):
         return None
 
     @override
-    def list(self, request: HttpRequest) -> Response:
+    def list(self, request: Request) -> Response:
         respoonse = self.check_logged_in()
 
         if respoonse is not None:
@@ -49,7 +49,7 @@ class MyTracksViewSet(ModelViewSet):
 
     @override
     def retrieve(
-        self, request: HttpRequest, pk: str | None = None,
+        self, request: Request, pk: str | None = None,
     ) -> Response:
         response = self.check_logged_in()
 
