@@ -8,7 +8,7 @@ router = DefaultRouter()
 router.register("users", UserViewSet)
 router.register("groups", GroupViewSet)
 router.register("tracks", TracksViewSet)
-router.register("me/tracks", MyTracksViewSet)
+router.register("me/tracks", MyTracksViewSet, basename="my track")
 
 urlpatterns = router.urls
 urlpatterns.append(

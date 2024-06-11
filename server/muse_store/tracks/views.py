@@ -1,3 +1,4 @@
+from django.db.models.manager import BaseManager
 from django.http import HttpRequest
 from rest_framework import status
 from rest_framework.response import Response
@@ -17,16 +18,18 @@ class TracksViewSet(ReadOnlyModelViewSet):
     serializer_class = TrackSerializer
 
 class MyTracksViewSet(ModelViewSet):
-    queryset = Track.objects.all()
-
     serializer_class = TrackSerializer
+
+    def get_queryset(self) -> BaseManager[Track]:  # pyright: ignore[reportIncompatibleMethodOverride]
+        user = self.request.user
+        return Track.objects.filter(uploader=user).all()
 
     def list(self, request: HttpRequest) -> Response:
         if not request.user.is_authenticated:
             content = {"reason": "this view requires authentication"}
             return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 
-        queryset = request.user.tracks
+        queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
