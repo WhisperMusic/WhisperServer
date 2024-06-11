@@ -27,8 +27,6 @@ class MyTracksViewSet(ModelViewSet):
             return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 
         queryset = request.user.tracks
-        serializer = self.serializer_class(
-            queryset, many=True, context={"request": request},
-        )
+        serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
