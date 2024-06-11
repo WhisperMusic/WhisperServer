@@ -1,4 +1,7 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from django.http import HttpRequest
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from muse_store.tracks.models import Track
 from muse_store.tracks.serializers import TrackSerializer
@@ -12,3 +15,20 @@ class TracksViewSet(ReadOnlyModelViewSet):
 
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
+
+class MyTracksViewSet(ModelViewSet):
+    queryset = Track.objects.all()
+
+    serializer_class = TrackSerializer
+
+    def list(self, request: HttpRequest) -> Response:
+        if not request.user.is_authenticated:
+            content = {"reason": "this view requires authentication"}
+            return Response(content, status=status.HTTP_401_UNAUTHORIZED)
+
+        queryset = request.user.tracks
+        serializer = self.serializer_class(
+            queryset, many=True, context={"request": request},
+        )
+
+        return Response(serializer.data)
