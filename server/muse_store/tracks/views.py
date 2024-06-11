@@ -1,8 +1,7 @@
-from typing import cast, override
+from typing import Any, override
 
 from django.db.models.manager import BaseManager
 from django.shortcuts import get_object_or_404
-from rest_framework import status
 from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -29,6 +28,13 @@ class MyTracksViewSet(ModelViewSet):
         return Track.objects.all()
 
     @override
+    def get_serializer(self, *args: Any, **kwargs: Any) -> TrackSerializer:  # type: ignore[reportIncompatibleMethodOverride]
+        self.check_logged_in()
+        return super().get_serializer(
+            *args, **kwargs, uploader=self.request.user,
+        )
+
+    @override
     def filter_queryset(
         self, queryset: BaseManager[Track],
     ) -> BaseManager[Track]:
@@ -53,17 +59,3 @@ class MyTracksViewSet(ModelViewSet):
 
         serializer = self.get_serializer(track)
         return Response(serializer.data)
-
-    @override
-    def create(self, request: Request) -> Response:
-        self.check_logged_in()
-        serializer = cast(
-            TrackSerializer,
-            self.get_serializer(data=request.data, uploader=request.user),
-        )
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers,
-        )
