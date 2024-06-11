@@ -3,6 +3,7 @@ from typing import cast, override
 from django.db.models.manager import BaseManager
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
@@ -28,19 +29,13 @@ class MyTracksViewSet(ModelViewSet):
         user = self.request.user
         return Track.objects.filter(uploader=user).all()
 
-    def check_logged_in(self) -> Response | None:
+    def check_logged_in(self) -> None:
         if not self.request.user.is_authenticated:
-            content = {"detail": "This view requires authentication."}
-            return Response(content, status=status.HTTP_401_UNAUTHORIZED)
-
-        return None
+            raise NotAuthenticated
 
     @override
     def list(self, request: Request) -> Response:
-        respoonse = self.check_logged_in()
-
-        if respoonse is not None:
-            return respoonse
+        self.check_logged_in()
 
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
@@ -51,28 +46,20 @@ class MyTracksViewSet(ModelViewSet):
     def retrieve(
         self, request: Request, pk: str | None = None,
     ) -> Response:
-        response = self.check_logged_in()
-
-        if response is not None:
-            return response
-
+        self.check_logged_in()
         queryset = Track.objects.all()
         track = get_object_or_404(queryset, pk=pk)
 
         if track.uploader != request.user:
-            content = {"detail": "This track is owned not by you."}
-            return Response(content, status=status.HTTP_403_FORBIDDEN)
+            msg = "This track is owned not by you"
+            raise PermissionDenied(msg)
 
         serializer = self.get_serializer(track)
         return Response(serializer.data)
 
     @override
     def create(self, request: Request) -> Response:
-        response = self.check_logged_in()
-
-        if response is not None:
-            return response
-
+        self.check_logged_in()
         serializer = cast(
             TrackSerializer,
             self.get_serializer(data=request.data, uploader=request.user),
