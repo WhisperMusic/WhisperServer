@@ -26,7 +26,7 @@ class MyTracksViewSet(ModelViewSet):
 
     def list(self, request: HttpRequest) -> Response:
         if not request.user.is_authenticated:
-            content = {"reason": "this view requires authentication"}
+            content = {"detail": "This view requires authentication."}
             return Response(content, status=status.HTTP_401_UNAUTHORIZED)
 
         queryset = self.get_queryset()
