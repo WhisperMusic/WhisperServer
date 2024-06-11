@@ -26,21 +26,18 @@ class MyTracksViewSet(ModelViewSet):
 
     @override
     def get_queryset(self) -> BaseManager[Track]:  # pyright: ignore[reportIncompatibleMethodOverride]
-        user = self.request.user
-        return Track.objects.filter(uploader=user).all()
+        return Track.objects.all()
+
+    @override
+    def filter_queryset(
+        self, queryset: BaseManager[Track],
+    ) -> BaseManager[Track]:
+        self.check_logged_in()
+        return queryset.filter(uploader=self.request.user)
 
     def check_logged_in(self) -> None:
         if not self.request.user.is_authenticated:
             raise NotAuthenticated
-
-    @override
-    def list(self, request: Request) -> Response:
-        self.check_logged_in()
-
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-
-        return Response(serializer.data)
 
     @override
     def retrieve(
