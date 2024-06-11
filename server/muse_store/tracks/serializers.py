@@ -8,4 +8,4 @@ from muse_store.tracks.models import Track
 class TrackSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Track
-        fields: ClassVar = ["title", "artist", "audio"]
+        fields: ClassVar = ["title", "artist", "audio", "uploader"]
