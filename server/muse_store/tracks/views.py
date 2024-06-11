@@ -17,11 +17,13 @@ class TrackViewSet(ReadOnlyModelViewSet):
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
 
+
 class MyTrackViewSet(ModelViewSet):
     """Your tracks uploaded to Muse Store.
 
     Here you can get your tracks, edit them or upload new ones.
     """
+
     serializer_class = MyTrackSerializer
 
     @override
@@ -32,15 +34,18 @@ class MyTrackViewSet(ModelViewSet):
     def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # type: ignore[reportIncompatibleMethodOverride]
         self.check_logged_in()
         return super().get_serializer(
-            *args, **kwargs, uploader=self.request.user,
+            *args,
+            **kwargs,
+            uploader=self.request.user,
         )
 
     @override
     def filter_queryset(
-        self, queryset: BaseManager[Track],
+        self,
+        queryset: BaseManager[Track],
     ) -> BaseManager[Track]:
         self.check_logged_in()
-        return queryset.filter(uploader=self.request.user)
+        return queryset.filter(uploader=self.request.user)  # pyright: ignore[reportAttributeAccessIssue]
 
     def check_logged_in(self) -> None:
         if not self.request.user.is_authenticated:

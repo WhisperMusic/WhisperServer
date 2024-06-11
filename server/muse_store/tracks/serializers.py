@@ -18,7 +18,10 @@ class MyTrackSerializer(HyperlinkedModelSerializer):
         fields: ClassVar = ["url", "title", "artist", "audio"]
 
     def __init__(
-        self, *args: Any, uploader: User | None = None, **kwargs: Any,
+        self,
+        *args: Any,
+        uploader: User | None = None,
+        **kwargs: Any,
     ) -> None:
         super().__init__(*args, **kwargs)
         self.uploader = uploader
@@ -28,4 +31,4 @@ class MyTrackSerializer(HyperlinkedModelSerializer):
             raise ValueError
 
         validated_data["uploader"] = self.uploader
-        return Track.objects.create(**validated_data)
+        return Track.objects.create(**validated_data)  # pyright: ignore[reportAttributeAccessIssue]
