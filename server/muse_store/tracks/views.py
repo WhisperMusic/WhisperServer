@@ -9,15 +9,19 @@ from muse_store.tracks.serializers import MyTrackSerializer, TrackSerializer
 
 
 class TracksViewSet(ReadOnlyModelViewSet):
-    """General tracks viewset.
+    """All tracks ever uploaded to Muse Store.
 
-    This viewset provides read-only views for listing and retrieving tracks.
+    Here you can list all tracks or retrieve info about specific one.
     """
 
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
 
 class MyTracksViewSet(ModelViewSet):
+    """Your tracks uploaded to Muse Store.
+
+    Here you can get your tracks, edit them or upload new ones.
+    """
     serializer_class = MyTrackSerializer
 
     @override
