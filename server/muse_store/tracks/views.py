@@ -1,4 +1,4 @@
-from typing import override
+from typing import cast, override
 
 from django.db.models.manager import BaseManager
 from django.shortcuts import get_object_or_404
@@ -65,3 +65,21 @@ class MyTracksViewSet(ModelViewSet):
 
         serializer = self.get_serializer(track)
         return Response(serializer.data)
+
+    @override
+    def create(self, request: Request) -> Response:
+        response = self.check_logged_in()
+
+        if response is not None:
+            return response
+
+        serializer = cast(
+            TrackSerializer,
+            self.get_serializer(data=request.data, uploader=request.user),
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers,
+        )
