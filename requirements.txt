@@ -1,6 +1,6 @@
 # Web frameworks
-Django ~= 5.0.6
-djangorestframework ~= 3.14.0
+Django ~= 4.2
+djangorestframework ~= 3.15
 
 # Configuration and production secrets
 python-dotenv ~= 1.0.1
