@@ -1,6 +1,7 @@
-Django~=5.0.6
-# django-filter~=23.1 # will it be used?
-djangorestframework~=3.14.0
-# markdown~=3.6 # will it be used?
-python-dotenv~=1.0.1
-python-decouple~=3.8
+# Web frameworks
+Django ~= 5.0.6
+djangorestframework ~= 3.14.0
+
+# Configuration and production secrets
+python-dotenv ~= 1.0.1
+python-decouple ~= 3.8
