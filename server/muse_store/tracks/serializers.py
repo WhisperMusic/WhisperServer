@@ -31,4 +31,4 @@ class MyTrackSerializer(HyperlinkedModelSerializer):
             raise ValueError
 
         validated_data["uploader"] = self.uploader
-        return Track.objects.create(**validated_data)  # pyright: ignore[reportAttributeAccessIssue]
+        return Track.objects.create(**validated_data)
