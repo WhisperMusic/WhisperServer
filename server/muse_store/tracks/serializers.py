@@ -45,3 +45,23 @@ class PlaylistSerializer(HyperlinkedModelSerializer):
             "date_created",
             "date_last_modified",
         ]
+
+
+class MyPlaylistSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Playlist
+        fields: ClassVar = [
+            "url",
+            "title",
+            "tracks",
+            "date_created",
+            "date_last_modified",
+        ]
+
+    def __init__(self, *args: Any, creator: User, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.creator = creator
+
+    def create(self, validated_data: dict) -> Playlist:
+        validated_data["creator"] = self.creator
+        return Playlist.objects.create(**validated_data)
