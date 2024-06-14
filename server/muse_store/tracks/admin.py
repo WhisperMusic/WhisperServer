@@ -7,12 +7,16 @@ from .models import Playlist, Track
 class TrackAdmin(admin.ModelAdmin):
     fieldsets = [  # noqa: RUF012
         (None, {"fields": ["artist", "title"]}),
-        ("Date information", {"fields": ["date_uploaded"]}),
+        (
+            "Date information",
+            {"fields": ["date_uploaded", "date_last_modified"]},
+        ),
         ("Audio file", {"fields": ["audio"]}),
         ("Uploader of track", {"fields": ["uploader"]}),
     ]
     date_hierarchy = "date_last_modified"
     list_display = ["title", "artist", "uploader", "date_uploaded"]  # noqa: RUF012
+    readonly_fields = ["date_uploaded", "date_last_modified"]  # noqa: RUF012
 
 
 @admin.register(Playlist)
