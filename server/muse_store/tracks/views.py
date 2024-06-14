@@ -58,3 +58,34 @@ class PlaylistViewSet(ModelViewSet):
 
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
+
+
+class MyPlaylistViewSet(ModelViewSet):
+    """Playlists on Muse Store created by you.
+
+    Here you can get your playlists, edit them or create new ones.
+    """
+
+    queryset = Playlist.objects.all()
+    serializer_class = MyPlaylistSerializer
+
+    @override
+    def get_serializer(  # pyright: ignore[reportIncompatibleMethodOverride]
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> MyPlaylistSerializer:
+        return super().get_serializer(
+            *args,
+            **kwargs,
+            creator=self.request.user,
+        )
+
+    @override
+    def filter_queryset(
+        self,
+        queryset: BaseManager[Playlist],
+    ) -> BaseManager[Playlist]:
+        return queryset.filter(creator=self.request.user)
+
+    permission_classes = [IsAuthenticated]  # noqa: RUF012
