@@ -47,7 +47,7 @@ class MyTrackViewSet(ModelViewSet):
     ) -> BaseManager[Track]:
         return queryset.filter(uploader=self.request.user)
 
-    permission_classes = [IsAuthenticated]  # noqa: RUF012
+    permission_classes = [IsAuthenticated]
 
 
 class PlaylistViewSet(ModelViewSet):
@@ -88,4 +88,4 @@ class MyPlaylistViewSet(ModelViewSet):
     ) -> BaseManager[Playlist]:
         return queryset.filter(creator=self.request.user)
 
-    permission_classes = [IsAuthenticated]  # noqa: RUF012
+    permission_classes = [IsAuthenticated]
