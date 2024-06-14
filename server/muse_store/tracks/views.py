@@ -1,7 +1,7 @@
 from typing import Any, override
 
 from django.db.models.manager import BaseManager
-from rest_framework.exceptions import NotAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Playlist, Track
@@ -37,7 +37,6 @@ class MyTrackViewSet(ModelViewSet):
 
     @override
     def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # pyright: ignore[reportIncompatibleMethodOverride]
-        self.check_logged_in()
         return super().get_serializer(
             *args,
             **kwargs,
@@ -49,12 +48,9 @@ class MyTrackViewSet(ModelViewSet):
         self,
         queryset: BaseManager[Track],
     ) -> BaseManager[Track]:
-        self.check_logged_in()
         return queryset.filter(uploader=self.request.user)
 
-    def check_logged_in(self) -> None:
-        if not self.request.user.is_authenticated:
-            raise NotAuthenticated
+    permission_classes = [IsAuthenticated]  # noqa: RUF012
 
 
 class PlaylistViewSet(ModelViewSet):
