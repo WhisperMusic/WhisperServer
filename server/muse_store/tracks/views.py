@@ -29,11 +29,8 @@ class MyTrackViewSet(ModelViewSet):
     Here you can get your tracks, edit them or upload new ones.
     """
 
+    queryset = Track.objects.all()
     serializer_class = MyTrackSerializer
-
-    @override
-    def get_queryset(self) -> BaseManager[Track]:  # pyright: ignore[reportIncompatibleMethodOverride]
-        return Track.objects.all()
 
     @override
     def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # pyright: ignore[reportIncompatibleMethodOverride]
