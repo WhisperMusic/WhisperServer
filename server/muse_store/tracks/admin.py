@@ -5,7 +5,7 @@ from .models import Playlist, Track
 
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
-    fieldsets = [  # noqa: RUF012
+    fieldsets = [
         (None, {"fields": ["artist", "title"]}),
         (
             "Date information",
@@ -15,13 +15,13 @@ class TrackAdmin(admin.ModelAdmin):
         ("Uploader of track", {"fields": ["uploader"]}),
     ]
     date_hierarchy = "date_last_modified"
-    list_display = ["title", "artist", "uploader", "date_uploaded"]  # noqa: RUF012
-    readonly_fields = ["date_uploaded", "date_last_modified"]  # noqa: RUF012
+    list_display = ["title", "artist", "uploader", "date_uploaded"]
+    readonly_fields = ["date_uploaded", "date_last_modified"]
 
 
 @admin.register(Playlist)
 class PlaylistAdmin(admin.ModelAdmin):
-    fieldsets = [  # noqa: RUF012
+    fieldsets = [
         (None, {"fields": ["title", "creator"]}),
         (
             "Date information",
@@ -30,5 +30,5 @@ class PlaylistAdmin(admin.ModelAdmin):
         ("Tracks", {"fields": ["tracks"]}),
     ]
     date_hierarchy = "date_last_modified"
-    list_display = ["title", "creator", "date_created"]  # noqa: RUF012
-    readonly_fields = ["date_created", "date_last_modified"]  # noqa: RUF012
+    list_display = ["title", "creator", "date_created"]
+    readonly_fields = ["date_created", "date_last_modified"]
