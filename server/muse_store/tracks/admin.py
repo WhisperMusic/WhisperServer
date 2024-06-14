@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Track
+from .models import Playlist, Track
 
 
 @admin.register(Track)
@@ -13,3 +13,14 @@ class TrackAdmin(admin.ModelAdmin):
     ]
     date_hierarchy = "date_last_modified"
     list_display = ["title", "artist", "uploader", "date_uploaded"]  # noqa: RUF012
+
+
+@admin.register(Playlist)
+class PlaylistAdmin(admin.ModelAdmin):
+    fieldsets = [  # noqa: RUF012
+        (None, {"fields": ["title", "creator"]}),
+        ("Date information", {"fields": ["date_created"]}),
+        ("Tracks", {"fields": ["tracks"]}),
+    ]
+    date_hierarchy = "date_last_modified"
+    list_display = ["title", "creator", "date_created"]  # noqa: RUF012
