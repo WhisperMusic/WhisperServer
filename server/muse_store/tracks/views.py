@@ -31,7 +31,7 @@ class MyTrackViewSet(ModelViewSet):
         return Track.objects.all()
 
     @override
-    def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # type: ignore[reportIncompatibleMethodOverride]
+    def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # pyright: ignore[reportIncompatibleMethodOverride]
         self.check_logged_in()
         return super().get_serializer(
             *args,
@@ -45,7 +45,7 @@ class MyTrackViewSet(ModelViewSet):
         queryset: BaseManager[Track],
     ) -> BaseManager[Track]:
         self.check_logged_in()
-        return queryset.filter(uploader=self.request.user)  # pyright: ignore[reportAttributeAccessIssue]
+        return queryset.filter(uploader=self.request.user)
 
     def check_logged_in(self) -> None:
         if not self.request.user.is_authenticated:

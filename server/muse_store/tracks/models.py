@@ -21,3 +21,22 @@ class Track(models.Model):
 
     def __str__(self) -> str:
         return f"{self.artist} - {self.title}"
+
+
+class Playlist(models.Model):
+    title = models.CharField(max_length=150)
+    tracks = models.ManyToManyField(Track)
+
+    creator = models.ForeignKey(
+        User,
+        models.CASCADE,
+        related_name="playlists",
+    )
+
+    date_created = models.DateTimeField(default=timezone.now)
+    date_last_modified = models.DateTimeField(auto_now=True)
+
+    objects: ClassVar[BaseManager[Self]]
+
+    def __str__(self) -> str:
+        return f'"{self.title}" compiled by {self.creator.get_username()}'
