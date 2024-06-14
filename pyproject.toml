@@ -20,6 +20,7 @@ ignore = [
     "SLF001", # private member access
     "PGH003", # type: ignore
     "D",      # missing documentation
+    "RUF012", # missing ClassVar annotation
 ]
 
 [tool.pyright]
