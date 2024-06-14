@@ -19,8 +19,12 @@ class TrackAdmin(admin.ModelAdmin):
 class PlaylistAdmin(admin.ModelAdmin):
     fieldsets = [  # noqa: RUF012
         (None, {"fields": ["title", "creator"]}),
-        ("Date information", {"fields": ["date_created"]}),
+        (
+            "Date information",
+            {"fields": ["date_created", "date_last_modified"]},
+        ),
         ("Tracks", {"fields": ["tracks"]}),
     ]
     date_hierarchy = "date_last_modified"
     list_display = ["title", "creator", "date_created"]  # noqa: RUF012
+    readonly_fields = ["date_created", "date_last_modified"]  # noqa: RUF012
