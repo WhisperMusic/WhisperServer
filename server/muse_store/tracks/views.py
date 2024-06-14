@@ -4,8 +4,13 @@ from django.db.models.manager import BaseManager
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from muse_store.tracks.models import Track
-from muse_store.tracks.serializers import MyTrackSerializer, TrackSerializer
+from .models import Playlist, Track
+from .serializers import (
+    MyPlaylistSerializer,
+    MyTrackSerializer,
+    PlaylistSerializer,
+    TrackSerializer,
+)
 
 
 class TrackViewSet(ReadOnlyModelViewSet):
@@ -50,3 +55,13 @@ class MyTrackViewSet(ModelViewSet):
     def check_logged_in(self) -> None:
         if not self.request.user.is_authenticated:
             raise NotAuthenticated
+
+
+class PlaylistViewSet(ModelViewSet):
+    """All playlists ever created on Muse Store.
+
+    Here you can list all playlists or get information about specific ones.
+    """
+
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
