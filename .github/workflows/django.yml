@@ -8,7 +8,7 @@ on:
 
 jobs:
   run-tests:
-    runs-on: [ self-hosted, linux, x64 ]
+    runs-on: [ self-hosted, windows, x64 ]
 
     steps:
     - uses: actions/checkout@v4
@@ -23,6 +23,6 @@ jobs:
     - name: Run Tests
       run: |
         cd server
-        export SECRET_KEY="!only-for-tests!f9+ilex)04-z%=3(fmd*s*h#11u3l1qglngj*do3lk@#^u4nk+"
-        export SERVER_DEBUG=True
+        set SECRET_KEY="!only-for-tests!f9+ilex)04-z%=3(fmd*s*h#11u3l1qglngj*do3lk@#^u4nk+"
+        set SERVER_DEBUG=True
         python manage.py test
