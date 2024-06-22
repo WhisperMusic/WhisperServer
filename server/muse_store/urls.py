@@ -1,23 +1,12 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
+from rest_framework_swagger.views import get_swagger_view
 
-from muse_store.tracks.views import (
-    MyPlaylistViewSet,
-    MyTrackViewSet,
-    PlaylistViewSet,
-    TrackViewSet,
-)
-from muse_store.users.views import GroupViewSet, UserViewSet
+from .router import router
 
-router = DefaultRouter()
-router.register("users", UserViewSet)
-router.register("groups", GroupViewSet)
-router.register("tracks", TrackViewSet)
-router.register("me/tracks", MyTrackViewSet, basename="my-track")
-router.register("playlists", PlaylistViewSet)
-router.register("me/playlists", MyPlaylistViewSet, basename="my-playlist")
+schema_view = get_swagger_view(title="Whisper REST API")
 
-urlpatterns = router.urls
-urlpatterns.append(
+urlpatterns = [
+    *router.urls,
     path("auth/", include("rest_framework.urls", namespace="rest_framework")),
-)
+    path("docs/", schema_view),
+]
