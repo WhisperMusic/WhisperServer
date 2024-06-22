@@ -1,23 +1,10 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
-from muse_store.tracks.views import (
-    MyPlaylistViewSet,
-    MyTrackViewSet,
-    PlaylistViewSet,
-    TrackViewSet,
-)
-from muse_store.users.views import GroupViewSet, UserViewSet
+from . import schema
+from .router import router
 
-router = DefaultRouter()
-router.register("users", UserViewSet)
-router.register("groups", GroupViewSet)
-router.register("tracks", TrackViewSet)
-router.register("me/tracks", MyTrackViewSet, basename="my-track")
-router.register("playlists", PlaylistViewSet)
-router.register("me/playlists", MyPlaylistViewSet, basename="my-playlist")
-
-urlpatterns = router.urls
-urlpatterns.append(
+urlpatterns = [
+    *router.urls,
     path("auth/", include("rest_framework.urls", namespace="rest_framework")),
-)
+    *schema.urls,
+]

@@ -1,5 +1,5 @@
 [tool.ruff]
-include = ["manage.py", "server/**"]
+include = ["*.py"]
 
 line-length = 78
 indent-width = 4
