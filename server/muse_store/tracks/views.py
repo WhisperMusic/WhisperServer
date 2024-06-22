@@ -50,7 +50,7 @@ class MyTrackViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 
-class PlaylistViewSet(ModelViewSet):
+class PlaylistViewSet(ReadOnlyModelViewSet):
     """All playlists ever created on Muse Store.
 
     Here you can list all playlists or get information about specific ones.
