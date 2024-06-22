@@ -1,5 +1,5 @@
 # Frameworks implicit requirements
-setuptools ~= 70
+setuptools ~= 70.1
 
 # Web frameworks
 Django ~= 4.2
