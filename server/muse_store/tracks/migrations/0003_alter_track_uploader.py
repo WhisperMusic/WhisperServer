@@ -7,12 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [  # noqa: RUF012
+    dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("tracks", "0002_track_uploader"),
     ]
 
-    operations = [  # noqa: RUF012
+    operations = [
         migrations.AlterField(
             model_name="track",
             name="uploader",

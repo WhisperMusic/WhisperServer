@@ -3,7 +3,7 @@ from typing import Any, ClassVar
 from django.contrib.auth.models import User
 from rest_framework.serializers import HyperlinkedModelSerializer
 
-from muse_store.tracks.models import Track
+from .models import Playlist, Track
 
 
 class TrackSerializer(HyperlinkedModelSerializer):
@@ -32,3 +32,36 @@ class MyTrackSerializer(HyperlinkedModelSerializer):
 
         validated_data["uploader"] = self.uploader
         return Track.objects.create(**validated_data)
+
+
+class PlaylistSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Playlist
+        fields: ClassVar = [
+            "url",
+            "title",
+            "tracks",
+            "creator",
+            "date_created",
+            "date_last_modified",
+        ]
+
+
+class MyPlaylistSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Playlist
+        fields: ClassVar = [
+            "url",
+            "title",
+            "tracks",
+            "date_created",
+            "date_last_modified",
+        ]
+
+    def __init__(self, *args: Any, creator: User, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.creator = creator
+
+    def create(self, validated_data: dict) -> Playlist:
+        validated_data["creator"] = self.creator
+        return Playlist.objects.create(**validated_data)

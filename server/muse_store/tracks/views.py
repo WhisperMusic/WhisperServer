@@ -1,11 +1,16 @@
 from typing import Any, override
 
 from django.db.models.manager import BaseManager
-from rest_framework.exceptions import NotAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from muse_store.tracks.models import Track
-from muse_store.tracks.serializers import MyTrackSerializer, TrackSerializer
+from .models import Playlist, Track
+from .serializers import (
+    MyPlaylistSerializer,
+    MyTrackSerializer,
+    PlaylistSerializer,
+    TrackSerializer,
+)
 
 
 class TrackViewSet(ReadOnlyModelViewSet):
@@ -24,15 +29,11 @@ class MyTrackViewSet(ModelViewSet):
     Here you can get your tracks, edit them or upload new ones.
     """
 
+    queryset = Track.objects.all()
     serializer_class = MyTrackSerializer
 
     @override
-    def get_queryset(self) -> BaseManager[Track]:  # pyright: ignore[reportIncompatibleMethodOverride]
-        return Track.objects.all()
-
-    @override
     def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # pyright: ignore[reportIncompatibleMethodOverride]
-        self.check_logged_in()
         return super().get_serializer(
             *args,
             **kwargs,
@@ -44,9 +45,47 @@ class MyTrackViewSet(ModelViewSet):
         self,
         queryset: BaseManager[Track],
     ) -> BaseManager[Track]:
-        self.check_logged_in()
         return queryset.filter(uploader=self.request.user)
 
-    def check_logged_in(self) -> None:
-        if not self.request.user.is_authenticated:
-            raise NotAuthenticated
+    permission_classes = [IsAuthenticated]
+
+
+class PlaylistViewSet(ReadOnlyModelViewSet):
+    """All playlists ever created on Muse Store.
+
+    Here you can list all playlists or get information about specific ones.
+    """
+
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+
+
+class MyPlaylistViewSet(ModelViewSet):
+    """Playlists on Muse Store created by you.
+
+    Here you can get your playlists, edit them or create new ones.
+    """
+
+    queryset = Playlist.objects.all()
+    serializer_class = MyPlaylistSerializer
+
+    @override
+    def get_serializer(  # pyright: ignore[reportIncompatibleMethodOverride]
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> MyPlaylistSerializer:
+        return super().get_serializer(
+            *args,
+            **kwargs,
+            creator=self.request.user,
+        )
+
+    @override
+    def filter_queryset(
+        self,
+        queryset: BaseManager[Playlist],
+    ) -> BaseManager[Playlist]:
+        return queryset.filter(creator=self.request.user)
+
+    permission_classes = [IsAuthenticated]
