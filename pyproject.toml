@@ -21,6 +21,7 @@ ignore = [
     "PGH003", # type: ignore
     "D",      # missing documentation
     "RUF012", # missing ClassVar annotation
+    "EXE001", # shebang is not executable
 ]
 
 [tool.pyright]
