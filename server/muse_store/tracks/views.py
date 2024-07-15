@@ -1,17 +1,31 @@
-from typing import Any, override
+from __future__ import annotations
 
-from django.db.models.manager import BaseManager
+from typing import TYPE_CHECKING, Any, cast, override
+
+from django.contrib.auth.models import User
+from django.db.models.query import QuerySet
+from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.serializers import BaseSerializer
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.response import Response
+from rest_framework.viewsets import (
+    GenericViewSet,
+    ModelViewSet,
+    ReadOnlyModelViewSet,
+)
 
 from .models import Playlist, Track
 from .serializers import (
     MyPlaylistSerializer,
-    MyTrackSerializer,
     PlaylistSerializer,
     TrackSerializer,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence  # noqa: F401
+
+    from django.db.models import QuerySet  # noqa: F401
+    from django.db.models.manager import BaseManager
+    from rest_framework.request import Request
 
 
 class TrackViewSet(ReadOnlyModelViewSet):
@@ -24,33 +38,22 @@ class TrackViewSet(ReadOnlyModelViewSet):
     serializer_class = TrackSerializer
 
 
-class MyTrackViewSet(ModelViewSet):
-    """Your tracks uploaded to Muse Store.
-
-    Here you can get your tracks, edit them or upload new ones.
-    """
-
-    queryset = Track.objects.all()
-    serializer_class = MyTrackSerializer
-
+class MyTrackViewSet(GenericViewSet, ListModelMixin):
     @override
-    def get_serializer(
-        self,
-        *args: Any,
-        **kwargs: Any,
-    ) -> BaseSerializer[Any]:
-        return super().get_serializer(
-            *args,
-            **kwargs,
-            uploader=self.request.user,
-        )
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        # self.request.user cannot be AnonymousUser 'cause of permissions
+        user = cast(User, self.request.user)
 
-    @override
-    def filter_queryset(
-        self,
-        queryset: BaseManager[Track],
-    ) -> BaseManager[Track]:
-        return queryset.filter(uploader=self.request.user)
+        queryset = user.tracks.only("pk")  # type: Sequence | QuerySet
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            queryset = page
+            make_response = self.get_paginated_response
+        else:
+            make_response = Response
+
+        return make_response([track.pk for track in queryset])
 
     permission_classes = [IsAuthenticated]
 
