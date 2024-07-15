@@ -11,4 +11,5 @@
     "python.analysis.ignore": [ // ignore pyright's errors
         "*"
     ],
+    "mypy.dmypyExecutable": "${workspaceFolder}/.venv/Scripts/dmypy.exe",
 }

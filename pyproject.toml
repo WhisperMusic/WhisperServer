@@ -25,6 +25,7 @@ ignore = [
 ]
 
 [tool.mypy]
+mypy_path = "server"
 files = ["server/**"]
 
 python_version = "3.12"
