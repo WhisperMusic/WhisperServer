@@ -2,6 +2,7 @@ from typing import Any, override
 
 from django.db.models.manager import BaseManager
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import BaseSerializer
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Playlist, Track
@@ -33,7 +34,11 @@ class MyTrackViewSet(ModelViewSet):
     serializer_class = MyTrackSerializer
 
     @override
-    def get_serializer(self, *args: Any, **kwargs: Any) -> MyTrackSerializer:  # pyright: ignore[reportIncompatibleMethodOverride]
+    def get_serializer(
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> BaseSerializer[Any]:
         return super().get_serializer(
             *args,
             **kwargs,
